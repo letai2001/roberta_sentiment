@@ -32,10 +32,11 @@ set_seed(69)
 # Look for gpu to use. Will use `cpu` by default if no gpu found.
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-from tokenizers import models, pre_tokenizers, trainers, Tokenizer, ByteLevelBPETokenizer
+from tokenizers import models, pre_tokenizers, decoders, trainers, processors, Tokenizer, ByteLevelBPETokenizer
 from Dataset import DataProcessor
 from ModelArg import model_data_args
-def train_tokenizer(dataset_path, vocab_size, output_dir):
+from config import output_model_dir, model_type, dataset_name, vocab_size, max_seq_length, mlm_probability, whole_word_mask, line_by_line, pad_to_max_length
+def train_tokenizer(output_dir):
     # Load dataset
     data_pro = DataProcessor(model_data_args , None)
     datasets = data_pro.get_dataset()
@@ -58,12 +59,18 @@ def train_tokenizer(dataset_path, vocab_size, output_dir):
 
     # Save tokenizer
     tokenizer.save(f"{output_dir}/tokenizer.json")
+    tokenizer.post_processor = processors.RobertaProcessing(
+        ("</s>", tokenizer.token_to_id("</s>")),
+        ("<s>", tokenizer.token_to_id("<s>")),
+    )
+    tokenizer.enable_truncation(max_length=512)
+
+    # Set decoder
+    tokenizer.decoder = decoders.ByteLevel()
 
 if __name__ == "__main__":
     # Define parameters
-    dataset_path = 'sepidmnorozy/Vietnamese_sentiment'  # Change this to your dataset path
-    vocab_size = 4000
     output_dir = "./tokenizer_output"
 
     # Train tokenizer
-    train_tokenizer(dataset_path, vocab_size, output_dir)
+    train_tokenizer(output_dir)

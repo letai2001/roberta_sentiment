@@ -22,8 +22,7 @@ from transformers import (CONFIG_MAPPING,
                           PretrainedConfig,
                           Trainer,
                           set_seed)
-from config import model_type, dataset_name, max_seq_length, mlm_probability, whole_word_mask, line_by_line, pad_to_max_length
-
+from config import output_model_dir, model_type, dataset_name, vocab_size, max_seq_length, mlm_probability, whole_word_mask, line_by_line, pad_to_max_length
 # Set seed for reproducibility,
 set_seed(69)
 #chay lai notebook cung ket qua
