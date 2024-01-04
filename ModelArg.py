@@ -22,6 +22,7 @@ from transformers import (CONFIG_MAPPING,
                           PretrainedConfig,
                           Trainer,
                           set_seed)
+from config import model_type, dataset_name, max_seq_length, mlm_probability, whole_word_mask, line_by_line, pad_to_max_length
 
 # Set seed for reproducibility,
 set_seed(69)
@@ -188,3 +189,14 @@ class ModelDataArguments(object):
         else:
             print("Training new model from scratch!")
             return AutoModelForMaskedLM.from_config(model_config)
+model_data_args = ModelDataArguments(
+    dataset_name=dataset_name,
+    line_by_line=line_by_line,
+    whole_word_mask=whole_word_mask,
+    mlm_probability=mlm_probability,
+    max_seq_length=max_seq_length,
+    pad_to_max_length=pad_to_max_length,
+    overwrite_cache=False,
+    model_type=model_type,
+    cache_dir=None
+)
