@@ -36,7 +36,7 @@ from tokenizers import models, pre_tokenizers, decoders, trainers, processors, T
 from Dataset import DataProcessor
 from ModelArg import model_data_args
 from config import output_model_dir, model_type, dataset_name, vocab_size, max_seq_length, mlm_probability, whole_word_mask, line_by_line, pad_to_max_length
-def train_tokenizer(output_dir):
+def train_tokenizer():
     # Load dataset
     data_pro = DataProcessor(model_data_args , None)
     datasets = data_pro.get_dataset()
@@ -58,7 +58,7 @@ def train_tokenizer(output_dir):
     tokenizer.train_from_iterator(iterator=datasets['train']['text'], trainer=trainer)
 
     # Save tokenizer
-    tokenizer.save(f"{output_dir}/tokenizer.json")
+    tokenizer.save("tokenizer.json")
     tokenizer.post_processor = processors.RobertaProcessing(
         ("</s>", tokenizer.token_to_id("</s>")),
         ("<s>", tokenizer.token_to_id("<s>")),
@@ -70,7 +70,7 @@ def train_tokenizer(output_dir):
 
 if __name__ == "__main__":
     # Define parameters
-    output_dir = "./tokenizer_output"
+    # output_dir = "./tokenizer_output"
 
     # Train tokenizer
-    train_tokenizer(output_dir)
+    train_tokenizer()
