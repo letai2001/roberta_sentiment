@@ -188,6 +188,59 @@ class ModelDataArguments(object):
         else:
             print("Training new model from scratch!")
             return AutoModelForMaskedLM.from_config(model_config)
+    def get_tokenizer(self, local_path, config):
+        r"""
+        Get model tokenizer.
+
+        Using the ModelDataArguments return the model tokenizer and change
+        `max_seq_length` from `args` if needed.
+
+        Arguments:
+
+            args (:obj:`ModelDataArguments`):
+            Model and data configuration arguments needed to perform pre-training.
+
+            local_path (:obj:`str`):
+            Path to the trained tokenizer.
+
+            config (:obj:`Config`):
+            Model Configuration.
+
+        Returns:
+
+            :obj:`PreTrainedTokenizer`: Model transformers tokenizer.
+
+        """
+
+        # Check tokenizer configuration.
+        if self.tokenizer_name:
+            # Use tokenizer name if defined.
+            tokenizer = AutoTokenizer.from_pretrained(self.tokenizer_name,
+                                                    cache_dir=self.cache_dir)
+
+        elif self.model_name_or_path:
+            # Use tokenizer name of path if defined.
+            tokenizer = AutoTokenizer.from_pretrained(self.model_name_or_path,
+                                                    cache_dir=self.cache_dir)
+        else:
+            tokenizer = AutoTokenizer.from_pretrained(local_path,
+                                                    config=config,
+                                                    cache_dir=self.cache_dir)
+        
+        # Setup data maximum number of tokens.
+        if self.max_seq_length <= 0:
+            # Set max_seq_length to maximum length of tokenizer.
+            # Input max_seq_length will be the max possible for the model.
+            self.max_seq_length = tokenizer.model_max_length
+        else:
+            # Never go beyond tokenizer maximum length.
+            self.max_seq_length = min(self.max_seq_length, tokenizer.model_max_length)
+
+        return tokenizer
+
+
+
+
 model_data_args = ModelDataArguments(
     dataset_name=dataset_name,
     line_by_line=line_by_line,
@@ -199,3 +252,4 @@ model_data_args = ModelDataArguments(
     model_type=model_type,
     cache_dir=None
 )
+

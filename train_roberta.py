@@ -22,8 +22,9 @@ from transformers import (CONFIG_MAPPING,
                           PretrainedConfig,
                           Trainer,
                           set_seed)
-from ModelArg import ModelDataArguments
+from ModelArg import ModelDataArguments , model_data_args
 from DataCollator_custom import CustomDataCollatorForLanguageModeling
+from config import local_path_tokenize
 # Set seed for reproducibility,
 set_seed(69)
 #chay lai notebook cung ket qua
@@ -31,29 +32,28 @@ set_seed(69)
 # Look for gpu to use. Will use `cpu` by default if no gpu found.
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-class DataCollatorCreator:
-    def __init__(self, args: ModelDataArguments):
-        self.args = args
+print('Loading model configuration...')
+override_config = {
+    "num_hidden_layers": 8,
+    "num_attention_heads": 8,
+    "intermediate_size": 2048,
+    "hidden_size": 512,
+    "max_position_embeddings": 130 # 128+2 for special tokens
+}
+config = model_data_args.get_model_config(override_config)
 
-    def get_collator(self, tokenizer: PreTrainedTokenizer):
-        """
-        Get appropriate collator function.
+# Load model tokenizer.
+print('Loading model`s tokenizer...')
+tokenizer = model_data_args.get_tokenizer(local_path=local_path_tokenize, config=config)
 
-        Arguments:
-            tokenizer (:obj:`PreTrainedTokenizer`): Model transformers tokenizer.
+# Loading model.
+print('Loading actual model...')
+model =model_data_args.get_model(model_data_args, config)
 
-        Returns:
-            :obj:`data_collator`: Transformers specific data collator.
-        """
-        if self.args.whole_word_mask:
-            return DataCollatorForWholeWordMask(
-                tokenizer=tokenizer,
-                mlm_probability=self.args.mlm_probability,
-            )
-        else:
-            return CustomDataCollatorForLanguageModeling(
-                tokenizer=tokenizer,
-                mlm=True,
-                mlm_probability=self.args.mlm_probability,
-            )
-    
+# Resize model to fit all tokens in tokenizer.
+model.resize_token_embeddings(len(tokenizer))
+
+# Number of model parameters
+print("Number of model parameters:", model.num_parameters())
+
+

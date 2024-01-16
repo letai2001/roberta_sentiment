@@ -44,7 +44,7 @@ def train_tokenizer():
     # Initialize a tokenizer
     tokenizer = Tokenizer(models.BPE())   # or use ByteLevelBPETokenizer()
     tokenizer.pre_tokenizer = pre_tokenizers.ByteLevel(add_prefix_space=False) 
-
+    
     # Define trainer
     trainer = trainers.BpeTrainer(vocab_size=vocab_size, min_frequency=2, special_tokens=[
         "<s>",  # [CLS]

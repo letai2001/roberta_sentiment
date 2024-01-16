@@ -1,0 +1,62 @@
+{
+  "builder_name": "csv",
+  "citation": "",
+  "config_name": "default",
+  "dataset_name": "vietnamese_sentiment",
+  "dataset_size": 507666,
+  "description": "",
+  "download_checksums": {
+    "hf://datasets/sepidmnorozy/Vietnamese_sentiment@8e816cff499ad7d8af3763d7167ac48512f19c15/train.csv": {
+      "num_bytes": 329189,
+      "checksum": null
+    },
+    "hf://datasets/sepidmnorozy/Vietnamese_sentiment@8e816cff499ad7d8af3763d7167ac48512f19c15/dev.csv": {
+      "num_bytes": 51979,
+      "checksum": null
+    },
+    "hf://datasets/sepidmnorozy/Vietnamese_sentiment@8e816cff499ad7d8af3763d7167ac48512f19c15/test.csv": {
+      "num_bytes": 99165,
+      "checksum": null
+    }
+  },
+  "download_size": 480333,
+  "features": {
+    "label": {
+      "dtype": "int64",
+      "_type": "Value"
+    },
+    "text": {
+      "dtype": "string",
+      "_type": "Value"
+    }
+  },
+  "homepage": "",
+  "license": "",
+  "size_in_bytes": 987999,
+  "splits": {
+    "train": {
+      "name": "train",
+      "num_bytes": 348375,
+      "num_examples": 2384,
+      "dataset_name": "vietnamese_sentiment"
+    },
+    "validation": {
+      "name": "validation",
+      "num_bytes": 54616,
+      "num_examples": 331,
+      "dataset_name": "vietnamese_sentiment"
+    },
+    "test": {
+      "name": "test",
+      "num_bytes": 104675,
+      "num_examples": 685,
+      "dataset_name": "vietnamese_sentiment"
+    }
+  },
+  "version": {
+    "version_str": "0.0.0",
+    "major": 0,
+    "minor": 0,
+    "patch": 0
+  }
+}

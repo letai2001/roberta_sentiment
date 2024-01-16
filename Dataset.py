@@ -56,6 +56,8 @@ class DataProcessor:
                 split=f"train[{self.model_args.validation_split_percentage}%:]",
                 cache_dir=self.model_args.cache_dir,
             )
+        save_path = "C:\\Users\\Admin\\Downloads\\roberta\\data"  # Thay đổi đường dẫn này theo nhu cầu của bạn
+        raw_datasets.save_to_disk(save_path)
 
         return raw_datasets
 
