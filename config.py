@@ -10,7 +10,7 @@ from transformers import (CONFIG_MAPPING,
                           PretrainedConfig,
                           Trainer,
                           set_seed)
-output_model_dir = "./mlm_bert"  # @param {type:"string"}
+output_model_dir = "C:\\Users\\Admin\\Downloads\\roberta\\mlm_bert"  # @param {type:"string"}
 
 model_type = 'roberta'  # @param {type:"string"}
 
@@ -71,7 +71,7 @@ do_eval = True # @param {type: "boolean"}
 overwrite_output_dir = True # @param {type: "boolean"}
 
 
-local_path_tokenize = 'C:\\Users\\Admin\\Downloads\\roberta\\tokenizer.json'
+local_path_tokenize = 'tokenizer.json'
 
 # Define arguments for training
 # `TrainingArguments` contains a lot more arguments.

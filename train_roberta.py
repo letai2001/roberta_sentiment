@@ -24,7 +24,7 @@ from transformers import (CONFIG_MAPPING,
                           set_seed)
 from ModelArg import ModelDataArguments , model_data_args
 from DataCollator_custom import CustomDataCollatorForLanguageModeling
-from config import local_path_tokenize
+from config import output_model_dir , local_path_tokenize
 # Set seed for reproducibility,
 set_seed(69)
 #chay lai notebook cung ket qua
@@ -44,11 +44,11 @@ config = model_data_args.get_model_config(override_config)
 
 # Load model tokenizer.
 print('Loading model`s tokenizer...')
-tokenizer = model_data_args.get_tokenizer(local_path=local_path_tokenize, config=config)
+tokenizer = model_data_args.get_tokenizer(local_path=output_model_dir, config=config)
 
 # Loading model.
 print('Loading actual model...')
-model =model_data_args.get_model(model_data_args, config)
+model =model_data_args.get_model(config)
 
 # Resize model to fit all tokens in tokenizer.
 model.resize_token_embeddings(len(tokenizer))
