@@ -22,9 +22,12 @@ from transformers import (CONFIG_MAPPING,
                           PretrainedConfig,
                           Trainer,
                           set_seed)
+from Dataset import DataProcessor
+
 from ModelArg import ModelDataArguments , model_data_args
 from DataCollator_custom import CustomDataCollatorForLanguageModeling
-from config import output_model_dir , local_path_tokenize
+from config import output_model_dir , local_path_tokenize , training_args
+from DataCollator import DataCollatorCreator
 # Set seed for reproducibility,
 set_seed(69)
 #chay lai notebook cung ket qua
@@ -56,4 +59,27 @@ model.resize_token_embeddings(len(tokenizer))
 # Number of model parameters
 print("Number of model parameters:", model.num_parameters())
 
+print('Preprocessing datasets...')
+data_pro = DataProcessor(model_data_args , training_args)
+datasets = data_pro.get_dataset()
+text_datasets = datasets.remove_columns('label')
+tokenized_datasets = data_pro.preprocess_data(text_datasets, tokenizer)
 
+# Split train/eval datasets
+train_dataset, eval_dataset = tokenized_datasets['train'], tokenized_datasets['validation']
+print('Training set:', len(train_dataset))
+print('Validation set:', len(eval_dataset))
+
+data_collator_creator = DataCollatorCreator(model_data_args)
+# Get data collator to modify data format depending on type of model used.
+data_collator = data_collator_creator.get_collator(model_data_args, tokenizer)
+
+# Check how many logging prints you'll have. This is to avoid overflowing the
+# notebook with a lot of prints. Display warning to user if the logging steps
+# that will be displayed is larger than 100.
+if (len(train_dataset) // training_args.per_device_train_batch_size \
+    // training_args.logging_steps * training_args.num_train_epochs) > 100:
+  # Display warning.
+  warnings.warn('Your `logging_steps` value will will do a lot of printing!' \
+                ' Consider increasing `logging_steps` to avoid overflowing' \
+                ' the notebook with a lot of prints!')
