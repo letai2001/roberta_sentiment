@@ -49,11 +49,42 @@ class ModelDataArguments(object):
 
             warnings: If `model_config_name` and `model_name_or_path` are both
             `None`, the model will be trained from scratch.
-
+            
+            model_type: Loại mô hình sử dụng: bert, roberta
+        
+            config_name: Cấu hình của mô hình sử dụng: bert, roberta
+            
+            tokenizer_name: Tokenizer được sử dụng để xử lý dữ liệu cho việc huấn luyện mô hình.
+            Thông thường, nó có cùng tên với model_name_or_path: bert-base-cased, roberta-base, v.v.
+            
+            model_name_or_path :Đường dẫn đến mô hình transformer hiện có 
+            hoặc tên của mô hình transformer sẽ được sử dụng: bert-base-cased, roberta-base vv.
+            
+            dataset_name: Tên của bộ dữ liệu sử dụng (qua thư viện datasets).
+            
+            dataset_config_name: Tên cấu hình của bộ dữ liệu sẽ sử dụng (qua thư viện datasets). 
+            
+            cache_dir: Đường dẫn đến các tệp cache. Nó giúp tiết kiệm thời gian khi chạy lại code. 
+            
+            preprocessing_num_workers: Số lượng "quá trình" sử dụng cho quá trình tiền xử lý
+            
+            line_by_line: Có nên xử lý các dòng văn bản khác nhau trong tập dữ liệu như là các chuỗi khác nhau không?
+            whole_word_mask: Được sử dụng như là flag để xác định liệu chúng ta có quyết định sử dụng việc che kín toàn bộ từ hay không. Việc che kín toàn bộ từ có nghĩa là toàn bộ từ sẽ được che kín
+            trong quá trình đào tạo thay vì các token có thể là các phần của từ.
+            
+            mlm_probability: Khi đào tạo các mô hình ngôn ngữ bị mask . Cần phải có mlm=True. 
+            Nó biểu thị xác suất che khuất các token khi đào tạo mô hình.
+            
+            max_seq_length: Độ dài tối đa của chuỗi đầu vào sau khi được mã hóa thành các token. Các chuỗi dài hơn sẽ bị cắt ngắn.
+            
+            pad_to_max_length: Có nên đệm tất cả các mẫu cho đến max_seq_length không? Nếu False, 
+            pad  sẽ được đệm theo cách linh hoạt khi chia thành batch sao cho đạt đến độ dài tối đa trong batch.
+            overwrite_cache:Nếu có bất kỳ tệp được lưu trữ trong bộ nhớ cache, hãy ghi đè lên chúng.
+            validation_split_percentage:  Tỷ lệ phần trăm của tập huấn luyện được sử dụng làm tập validation nếu không có phân chia validation.
     """
 
     def __init__(self,
-               model_type=None,
+               model_type=None, 
                config_name=None,
                tokenizer_name=None,
                model_name_or_path=None,

@@ -23,7 +23,7 @@ max_seq_length = 128   # @param {type:"number"}
 
 mlm_probability = 0.15   # @param {type:"number"}
 
-whole_word_mask = False   # @param {type:"boolean"}
+whole_word_mask = True   # @param {type:"boolean"}
 
 line_by_line = True   # @param {type:"boolean"}
 
